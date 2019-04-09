@@ -41,6 +41,7 @@ class Solution {
     public ListNode reverseKGroup(ListNode head, int k) {
         ListNode pre = null, cur = head, temp = null, check = head;
         int canrun = 0, count = 0; // 检查链表长度是否满足翻转
+
         while (canrun < k && check != null) {
             canrun++;
             check = check.next;
@@ -70,8 +71,11 @@ class Solution {
     public ListNode reverseKGroup(ListNode head, int k) {
         ListNode node = head, prev = null, result = new ListNode(0), tail = result;
         int i = 0;
+
         for (; node != null; ++i) {
             ListNode next = node.next;
+            // 循环整个链表，当为第k个的时候，处理一下头尾的连接
+            // 不是第k的时候就是头插法交换结点
             if (i % k == 0 && i != 0) {
                 tail.next = prev;
                 tail = head;
@@ -83,6 +87,8 @@ class Solution {
             prev = node;
             node = next;
         }
+        // 最后遍历的结果数i如果不是k的整数，则把剩余的部分调整成正常顺序
+        // 相当于反向思维，向都调整，再把不满足条件的调整回来
         if (i % k != 0) {
             for (node = prev, prev = null; node != null;) {
                 ListNode next = node.next;
@@ -93,5 +99,49 @@ class Solution {
         }
         tail.next = prev;
         return result.next;
+    }
+
+    // 也可定义数组 ListNode[] node = new ListNode[k]
+    // 每次递增扫描，个数为 k时，正好数组填满进行新链表构建并将 i置0继续扫描
+    // 如果个数不为k则表示不需要翻转
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null) {
+            return null;
+        }
+        ListNode[] temp = new ListNode[k];
+        ListNode node = head;
+        ListNode newHead = null;
+        ListNode newTail = null;
+
+        // 当前临时数组中存入的node个数
+        int i = 0;
+        while (node != null) {
+            i++;
+            ListNode next = node.next;
+            temp[i - 1] = node;
+            if (i == k) {
+                for (int j = i - 1; j >= 0; j--) {
+                    if (newHead == null) {
+                        newHead = newTail = temp[j];
+                    } else {
+                        newTail = newTail.next = temp[j];
+                    }
+                }
+                i = 0;
+            }
+            node = next;
+        }
+        // 链表长度小于k，没有反转过;
+        if (newHead == null) {
+            return head;
+        }
+        // 尾节点的next现在指向反转前的next
+        newTail.next = null;
+        // 表示还有不需要翻转的节点
+        if (i > 0) {
+            newTail.next = temp[0];
+        }
+        return newHead;
+
     }
 }
