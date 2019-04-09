@@ -36,17 +36,35 @@
  * next; ListNode(int x) { val = x; } }
  */
 class Solution {
-    /*
-     * // 两种方法 递归和非递归法 // 首先是递归方法，递归方法的关键是找到终止条件【起始先写终止条件】，本题为不满足长度k停止 public
-     * ListNode reverseKGroup(ListNode head, int k) { ListNode pre = null, cur =
-     * head, temp = null, check = head; int canrun = 0, count = 0; // 检查链表长度是否满足翻转
-     * while (canrun < k && check != null) { canrun++; check = check.next; } //
-     * 满足条件开始翻转 if (canrun == k) { while (count < k) { temp = cur.next; cur.next =
-     * pre; pre = cur; cur = temp; count++; } // 内层递归 if (temp != null) { head.next
-     * = reverseKGroup(temp, k); } return pre;//
-     * 函数返回至，函数执行结束，返回翻转部分的最后一个节点，作为新链表的第一个结点 } //
-     * 不满足条件直接返回head即可(递归的时候输入的head为temp) else return head; }
-     */
+
+    // 两种方法 递归和非递归法 // 首先是递归方法，递归方法的关键是找到终止条件【起始先写终止条件】，本题为不满足长度k停止
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode pre = null, cur = head, temp = null, check = head;
+        int canrun = 0, count = 0; // 检查链表长度是否满足翻转
+        while (canrun < k && check != null) {
+            canrun++;
+            check = check.next;
+        }
+        // 满足条件开始翻转
+        if (canrun == k) {
+            while (count < k) {
+                temp = cur.next;
+                cur.next = pre;
+                pre = cur;
+                cur = temp;
+                count++;
+            }
+            // 内层递归
+            if (temp != null) {
+                head.next = reverseKGroup(temp, k);
+            }
+            return pre;
+        }
+        // 函数返回至，函数执行结束，返回翻转部分的最后一个节点，作为新链表的第一个结点 }
+        // 不满足条件直接返回head即可(递归的时候输入的head为temp)
+        else
+            return head;
+    }
 
     // 非递归方法
     public ListNode reverseKGroup(ListNode head, int k) {
