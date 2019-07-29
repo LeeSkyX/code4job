@@ -1,13 +1,18 @@
 #include <iostream>
-#include <stdio.h>
+#include <string>
+#include <vector>
+
 using namespace std;
 
 int main()
 {
-    int a;
-    cin >> a;
-    a *= 3;
-    cout << a << endl;
-    system("pause");
-    return a;
+
+    vector<string> msg{"Hello", "C++", "World", "from", "VS Code!"};
+
+    for (const string &word : msg)
+    {
+        cout << word << " ";
+    }
+    cout << endl;
+    getchar();
 }
